@@ -149,6 +149,21 @@ Depth-package depth=4=dim AND package-free AB, prime):
 | — | qwen3-small#false | 3 | ✅ |
 | — | kimi (auto-discovered skill) | 2 | ✅ |
 
+**True no-skill control (F2), after temporarily removing the global install:**
+`qwen3-small#false`, identical prompt to the original wave-1 baseline:
+**21 calls** (T1: 2, T2: 2, T3: **17**) with 6+ error events, five failed
+strategies to decode the `-2*P₀ + 3*P₁` class form (the exact trap-#17
+display) until `m2_help` found `HP(k)`, one syntax error that forced a
+kernel restart, and a full self-contained re-run — yet all three answers
+eventually correct. Two conclusions: (1) the with-skill 3–5 calls figure is
+real, not a control artifact — F2's 21 nearly reproduces qwen3#false's
+baseline 22 across a model swap; (2) the removal/reinstall round-trip
+confirmed the harness's skill listing updates live, so earlier F-cell
+contamination was genuine auto-discovery, not cache. Bonus harvest from
+F2's marathon (recorded for a future patch, NOT yet in the skill):
+`HP(k)` evaluates the class form at integer k; `list entries HP` is a
+SYNTAX error (unbalanced `list` usage) — kernel-fatal per §2.
+
 Findings:
 
 1. **Generalization holds:** 3–5 calls, zero kernel errors on every
