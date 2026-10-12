@@ -60,9 +60,10 @@ print (I == ideal(x^3 - y, x^4 - z))
   quotes** (single quotes are invalid).
 - `A; B` on one line shows only `B`.
 - **Shared kernel hygiene:** the kernel is one global namespace. If other
-  agents/sessions may share it, prefix YOUR definitions (`my_R = QQ[x,y,z]`)
-  AND your ring variable names (trap #15), and never call `session_reset`/
-  `interrupt` — build each task self-contained in one call.
+  agents/sessions may share it, prefix YOUR definitions (`my_R = QQ[x,y,z]`
+  — at most one underscore, see trap #18) AND your ring variable names
+  (trap #15), and never call `session_reset`/`interrupt` — build each task
+  self-contained in one call.
 - **Syntax errors are kernel-fatal:** a parse error (e.g. using a reserved
   word like `in` as a variable) can restart the kernel with TOTAL state
   loss — unlike runtime errors (trap #6 survives). After any syntax error or
@@ -70,6 +71,10 @@ print (I == ideal(x^3 - y, x^4 - z))
   fresh kernel and re-send the whole self-contained block.
 
 ## 3. The traps that cost models the most turns
+
+*(Each demo block is self-contained — `verify.py` runs it in a fresh kernel.
+If you type them CONSECUTIVELY in one live session, remember trap #15: a
+later `QQ[w,x,y,z]` rebinds `x,y,z`; give each ring distinct variable names.)*
 
 | # | Trap | Reality (verified on 1.26) |
 |---|------|----------------------------|
@@ -89,6 +94,23 @@ print (I == ideal(x^3 - y, x^4 - z))
 | 14 | `homogenize(f, w)` errors | "homogenization requires variable in the same ring" — `sub` the element/ideal into the bigger ring FIRST: `homogenize(sub(f, S), w)` (verified). `sub(Ideal, Ring)` also works; RingMap forms failed in benchmarks — prefer `sub(_, Ring)` or `{var => expr}` substitution lists. |
 | 15 | building a second ring `QQ[w,x,y,z]` | **rebinds the global symbols x,y,z** into the new ring — objects created earlier still live in the old ring, so later mixed expressions fail confusingly (though `==` on corresponding elements works, verified). Use distinct variable names per ring (`QQ[my_x, my_y]`), especially on shared kernels. Related parse trap: `sub(f, w => 1) == g` swallows `==` into the options pair — assign the `sub` result first. |
 | 16 | `depth`/`isCM` for commutative algebra | core `depth` is about Net/String RENDERING — `depth(Ideal)`, `depth(Module)`, and quotient-ring forms have NO method until **`loadPackage "Depth"`** (NOT default-loaded; both states verified). `pdim` IS core. Package-free CM certificate: Auslander–Buchsbaum — see resolutions.md worked block. |
+| 17 | bare `hilbertPolynomial (S/I)` prints `- 2*P_0 + 3*P_1` | that is the **class form** (ProjectiveHilbertPolynomial): `P_j` = class of a codimension-`j` linear subspace; for a curve substitute `P_0=1`, `P_1=i+1` ⇒ `3i+1`. Don't hand-parse — for numbers use `hilbertPolynomial(S/I, Projective => false)` or `reduceHilbert hilbertSeries (S/I)` (both verified): |
+
+```m2
+S = QQ[w,x,y,z]
+C = ideal(x*z - y^2, y*w - z^2, x*w - y*z)
+print (hilbertPolynomial (S/C))
+print (reduceHilbert hilbertSeries (S/C))
+-- expect: + 3*P
+-- expect: 1 + 2T
+```
+
+| 18 | underscore in names (shared-kernel prefixes!) | `_` is M2's SUBSCRIPT operator: `med_R` is a legal indexed assignment, but chained `sg_ds_S` parses as a subscript/juxtaposition mess → `error: no method for assignment to binary operator _`. Prefix rule: ONE underscore max, plain segments (`kb_R`, `mmS`), and never embed reserved words as segments (`xh_in`). |
+
+```m2
+sg_ds_S = QQ[a,b]
+-- expect-error: binary operator _
+```
 
 Demo of traps 1–3 (note the exact error shapes):
 

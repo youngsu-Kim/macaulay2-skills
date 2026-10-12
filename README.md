@@ -54,7 +54,7 @@ FINDINGS.md               # the measured record: benchmark grid + doc-gap taxono
    against a real kernel — in CI on every push (GitHub Actions, Macaulay2's
    official Ubuntu PPA) and locally via `python3 tools/verify.py` — with
    asserted output (or asserted exact error text). `tools/verify.py`
-   currently runs 36 blocks, all passing. A claim that can't be verified
+   currently runs 38 blocks, all passing. A claim that can't be verified
    doesn't ship.
 
 ```sh

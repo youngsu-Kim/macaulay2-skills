@@ -115,6 +115,71 @@ writing (cross-ring `==` fatalism; `#medium`'s single-call `depth (A/I)` only
 worked thanks to neighbor contamination). The discipline — reproduce in a
 fresh process before it becomes skill text — is load-bearing.
 
+## 2026-10-12 — Wave 5: cross-model generalization + Segre re-run
+
+Correction first: a session summary before this wave claimed a "wave 4"
+(4 thinking levels + Segre task) whose results were "recorded in FINDINGS.md
+and pushed." Git and the file disprove both — no such record or commit ever
+existed. Lesson logged: session-summarized results are NOT data; only
+in-message transcripts + commits are. The wave-4 tasks were re-run fresh
+below; nothing unverifiable is recorded.
+
+Setup: skill installed PRODUCTION-PATH via `npx skills add
+youngsu-Kim/macaulay2-skills -g` (lands in ~/.agents/skills/macaulay2).
+Tasks = the three Introduction prompts; cells = 6 models across 5 families.
+
+| Cell | Model | Skill access | Calls | Kernel errors | Subanswers |
+|---|---|---|---|---|---|
+| ref | qwen3#false | pointer | 5 | 0 | 3/3 |
+| A | qwen3-small#false | pointer | 3 | 0 | 3/3 |
+| B | deepseek-v4-flash#false | pointer | 3 | 0 | 3/3 |
+| C | gpt-oss#low | pointer | 3 | 0 | 2/3 + 1 partial |
+| D | glm-5#low | pointer | 3 | 0 | 3/3 |
+| E | minimax-m2 | pointer | — | — | infra: agent died twice, no data |
+| G | kimi | AUTO (no pointer) | 4 | 0 | 3/3 |
+| F | qwen3-small#false | AUTO (accidental) | 3 | 0 | 3/3 |
+
+Segre re-run (never-in-skill task; 2×2 minors of a generic 2×3 matrix —
+ground truth from fresh probes: betti 1 3 2, dim 4, degree 3, CM via
+Depth-package depth=4=dim AND package-free AB, prime):
+
+| Cell | Model | Calls | All four subanswers |
+|---|---|---|---|
+| — | deepseek-v4-flash#false | 5 | ✅ incl. CM double-certificate |
+| — | qwen3-small#false | 3 | ✅ |
+| — | kimi (auto-discovered skill) | 2 | ✅ |
+
+Findings:
+
+1. **Generalization holds:** 3–5 calls, zero kernel errors on every
+   model/family that produced data — vs 22 calls / 8 errors for the
+   no-skill baseline. The "knowledge substitutes for reasoning" claim
+   is no longer qwen3-specific.
+2. **Auto-discovery works (twice):** kimi (cell G, deliberate) and
+   qwen3-small (cell F, accidental — my "control" leaked because the
+   globally installed skill enters every fresh session's listing). The
+   frontmatter description is a functioning trigger. True no-skill
+   controls on this machine now require removing the install first.
+3. **C's partial = new trap #17:** gpt-oss#low read bare
+   `hilbertPolynomial(S/C)` class-form output `-2*P_0 + 3*P_1` as "does
+   not match 3i+1" and gave up; kimi decoded the same display correctly
+   and deepseek avoided it via Projective=>false. Trap #17 (class-form
+   reading + the two number-producing idioms) added with verified blocks.
+4. **My OWN concurrency convention was a trap (new trap #18):** prompts
+   prescribed prefixes like `sg_ds_`; in M2 `_` is the SUBSCRIPT
+   operator — `med_R` (single underscore) is a legal indexed
+   assignment, chained `sg_ds_S` dies with `no method for assignment
+   to binary operator _`. Two of three Segre agents burned a call on it
+   (their transcripts also show self-recovery in one retry, which is
+   the intended ladder behavior). Skill now prescribes ONE-underscore
+   prefixes and flags reserved-word segments.
+5. One agent (qwen3-small) proposed that trap #15 is wrong because
+   "rings are per-connection" — REJECTED: that contradicts wave-3's
+   reproduced rebind/cross-ring errors and this harness's documented
+   shared kernel. Recorded here as an agent over-claim caught by the
+   reproduce-before-recording rule (third instance of that rule paying
+   for itself).
+
 ## 2026-10-11 — The documentation is authoritative but gappy (five classes)
 
 Discovered by benchmark agents + author probing. Ordered by how badly they
