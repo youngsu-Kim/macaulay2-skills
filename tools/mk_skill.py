@@ -223,12 +223,7 @@ def gen_packages(src: Path, loaded: list[str]) -> str:
         if entries:
             blocks.append(f"## {theme}\n\n" + "\n".join(entries) + "\n")
     intro = (
-        f"{total} packages ship with this Macaulay2 build ({starred_total} refereed ⭐, "
-        f"{bolt_total} loaded at startup ⚡ — plus Core itself; ⚡ packages need NO "
-        'loadPackage, their functions are available in a fresh session).\n'
-        'Load any other package: `loadPackage "Name"`. If M2 answers\n'
-        '"not reloaded; try Reload => true", it is ALREADY loaded — just use it\n'
-        "(do not force-reload: M2's reload machinery breaks on some packages).\n\n"
+        f"{total} packages ship with this Macaulay2 build ({starred_total} refereed ⭐, {bolt_total} loaded at startup ⚡ — plus Core itself; ⚡ packages need NO loadPackage, their functions are available in a fresh session). Load any other package: `loadPackage \"Name\"`. If M2 answers \"not reloaded; try Reload => true\", it is ALREADY loaded — just use it (do not force-reload: M2's reload machinery breaks on some packages).\n\n"
     )
     return intro + "\n".join(blocks)
 
