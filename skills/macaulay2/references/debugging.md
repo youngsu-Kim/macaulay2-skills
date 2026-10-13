@@ -1,7 +1,6 @@
 # Debugging Macaulay2 1.26 — error taxonomy
 
-Match the message, believe the FIRST error, act per the right column. Every
-block below reproduces its row on a real 1.26 kernel.
+Match the message, believe the FIRST error, act per the right column. Every block below reproduces its row on a real 1.26 kernel.
 
 | Message (look at this) | Real meaning | Fix |
 |---|---|---|
@@ -29,9 +28,7 @@ print (reduceGb I)
 -- expect-error: no method for adjacent objects
 ```
 
-Models respond to this message by re-typing the same call with spaces/parens
-variants (`reduceGb I`, `reduceGb(I)`…) — that NEVER helps: the symbol
-`reduceGb` does not exist in the pinned corpus (index grep: no relevant hit).
+Models respond to this message by re-typing the same call with spaces/parens variants (`reduceGb I`, `reduceGb(I)`…) — that NEVER helps: the symbol `reduceGb` does not exist in the pinned corpus (index grep: no relevant hit).
 
 ## Trap 2: the kernel remembers everything (no rollback)
 
@@ -43,9 +40,7 @@ print a
 -- expect: 404
 ```
 
-The failed line still left `a = 404` defined (the error killed only that
-input). In an interactive/MCP session, fix FORWARD; state survives errors.
-`class a` is the way to see what a name holds now:
+The failed line still left `a = 404` defined (the error killed only that input). In an interactive/MCP session, fix FORWARD; state survives errors. `class a` is the way to see what a name holds now:
 
 ```m2
 x = 2
@@ -66,8 +61,7 @@ print sq
 -- expect: 25
 ```
 
-`sq` is the *value* 25, not a lazy formula. (A function needs `->`:
-`f = n -> n^2`.)
+`sq` is the *value* 25, not a lazy formula. (A function needs `->`: `f = n -> n^2`.)
 
 ## Trap 4: suppressing output with `;` looks like a hang/crash
 
@@ -79,8 +73,7 @@ print "semicolons above printed nothing, but definitions took effect"
 -- expect: semicolons above printed nothing
 ```
 
-Statements ending in `;` ran (check: `I` exists) — they just don't display.
-In batch scripts the same rule applies to top-level expressions: use `print`.
+Statements ending in `;` ran (check: `I` exists) — they just don't display. In batch scripts the same rule applies to top-level expressions: use `print`.
 
 ## Trap 5: protected names in disguise
 
@@ -89,9 +82,7 @@ gb = 5
 -- expect-error: assignment to protected global variable
 ```
 
-Also protected: `res`, `betti`, `ideal`, `toExternalString`, etc. When a doc
-example shadows one with `a = ...`, it works — but for the common
-single-letter function names expect errors.
+Also protected: `res`, `betti`, `ideal`, `toExternalString`, etc. When a doc example shadows one with `a = ...`, it works — but for the common single-letter function names expect errors.
 
 ## Trap 6: "nothing happened" on valid-looking code
 
@@ -104,18 +95,14 @@ G = gb I
 print (describe R | "\n")
 ```
 
-`describe R` renders the ring (variables + monomial order) as a string;
-`class obj` gives the type; `peek` bypasses custom `net` methods.
+`describe R` renders the ring (variables + monomial order) as a string; `class obj` gives the type; `peek` bypasses custom `net` methods.
 
 ## Probing the package corpus at runtime (four traps, all verified)
 
 M2's two package lists have **opposite shapes**:
 
-- `loadedPackages` — a List of Package objects, loaded RIGHT NOW (21 entries
-  on a fresh 1.26.06 startup, Core included; NO parens — see error below).
-- `installedPackages()` — a FUNCTION returning a List of MANAGER-installed
-  packages, typically EMPTY even though 299 packages ship bundled and are
-  `loadPackage "Name"`-able.
+- `loadedPackages` — a List of Package objects, loaded RIGHT NOW (21 entries on a fresh 1.26.06 startup, Core included; NO parens — see error below).
+- `installedPackages()` — a FUNCTION returning a List of MANAGER-installed packages, typically EMPTY even though 299 packages ship bundled and are `loadPackage "Name"`-able.
 
 ```m2
 print (#loadedPackages)
@@ -125,9 +112,7 @@ print (class L, #L)
 -- expect: List
 ```
 
-The working idiom for names (Package objects have **no `.name` field** —
-"key not found in hash table" — and **no sort method** — "no method for
-binary operator ?" — so stringify first):
+The working idiom for names (Package objects have **no `.name` field** — "key not found in hash table" — and **no sort method** — "no method for binary operator ?" — so stringify first):
 
 ```m2
 names = for p in loadedPackages list toString p
@@ -147,6 +132,4 @@ sort loadedPackages
 -- expect-error: no method for binary operator
 ```
 
-Which packages ride along by default (⚡) and what they contribute:
-`references/packages.md`; the merged `index.tsv` rows carry the providing
-package in column 4.
+Which packages ride along by default (⚡) and what they contribute: `references/packages.md`; the merged `index.tsv` rows carry the providing package in column 4.
