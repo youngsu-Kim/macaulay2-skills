@@ -39,3 +39,7 @@ Per-package skills (wave 2+): `skills/macaulay2-<name>/`, artifacts generated vi
 ## Style (adopted 2026-10-12)
 
 Hand-written prose is ONE line per paragraph — never wrap manually. `python3 tools/reflow.py --check <files>` enforces it; running it plain reflows in place. The tool never touches ``` fenced blocks (M2 blocks are line-based and verify.py parses their newlines), tables, headings, or blockquotes. Generated artifacts (index.tsv, toc.md, packages.md) and LICENSE (verbatim legal text) are excluded.
+
+## Commit trailer
+
+Every commit message ends with: `Assisted-by: <MODEL> hosted at the National Research Platform (https://nrp.ai)` where `<MODEL>` is the name and version of the model of the session making the commit (e.g. `GLM-5.3-NVFP4`, `Qwen3.8-Flash-Next-FP8`). Verify the running session's model identity before writing it — never reuse a name copied from earlier commits. Historical commits keep the trailer they were made with; corrections are forward-looking only.
