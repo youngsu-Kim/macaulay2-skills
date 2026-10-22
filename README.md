@@ -62,6 +62,12 @@ python3 tools/mk_skill.py     # regenerate the three router artifacts
 python3 tools/verify.py       # re-verify every block (needs M2 on PATH)
 ```
 
+## Honest limits
+
+The claims above are exactly as strong as the evidence:
+
+- **Pinned to one build.** All verified behavior is Macaulay2 1.26.06; the reference provenance is the Homebrew arm64 build (runtime-detected default-loaded set recorded in each artifact header). CI re-verifies the same blocks weekly on Ubuntu's official PPA; for any other build, regenerate (`tools/mk_skill.py`) and re-verify (`tools/verify.py`) before trusting it.
+
 ## Roadmap
 
 One sibling skill per package that earns it, generated the same way from each package's own pinned docs (all 299 ship `master.html` + `toc.html`, so the pipeline is identical): `macaulay2-fourti-two`, `macaulay2-primarydecomposition`, … Install individually via `npx skills add youngsu-Kim/macaulay2-skills --skill <name>`.
