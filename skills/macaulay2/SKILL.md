@@ -64,10 +64,25 @@ print (reduceHilbert hilbertSeries (S/C))
 ```
 
 | 18 | underscore in names (shared-kernel prefixes!) | `_` is M2's SUBSCRIPT operator: `med_R` is a legal indexed assignment, but chained `sg_ds_S` parses as a subscript/juxtaposition mess → `error: no method for assignment to binary operator _`. Prefix rule: ONE underscore max, plain segments (`kb_R`, `mmS`), and never embed reserved words as segments (`xh_in`). |
+| 19 | `isRadical` | does NOT exist in M2 (0 index rows — the trap-#2 error fires). Test radicality by `radical I == I` (verified below). Bonus subtlety in the demo: a zero-dimensional ideal can be PRIME over QQ while its variety splits into conjugate points over the algebraic closure. |
 
 ```m2
 sg_ds_S = QQ[a,b]
 -- expect-error: binary operator _
+```
+
+```m2
+R = QQ[x,y]
+I = ideal(x^2 + y^2 - 1, x*y - 1)
+print (radical I == I, isPrime I)
+-- expect: (true, true)
+```
+
+```m2
+R = QQ[x,y]
+I = ideal(x*y - 1)
+print (isRadical I)
+-- expect-error: no method for adjacent objects
 ```
 
 Demo of traps 1–3 (note the exact error shapes):
@@ -145,9 +160,14 @@ For a resolution: the Betti totals must agree with `(dim, degree)` and the Hilbe
 | `references/groebner.md` | bases, orders, elimination, membership |
 | `references/resolutions.md` | `res`/`betti` reading, Hilbert series/polynomial |
 | `references/debugging.md` | error-message taxonomy with repro blocks |
+| `references/package-writing.md` | official wiki style guide distilled: naming, package code behavior, doc nodes, JSAG prose — with kernel-verified idioms (`getSymbol`, `monoid`, `instance`) |
 
 Per-package deep-dives live in sibling skills (`macaulay2-<name>`) generated from each package's own pinned docs.
 
 ## 6. Companion server
 
 This skill pairs with the **macaulay2-mcp** MCP server (persistent 1.26 kernel, `m2_help`, memory line after every evaluation, OS-call gate). The skill is useful with any M2 access path; the lookup ladder's rung 3 only exists there.
+
+## 7. Writing M2 code and packages
+
+When asked to WRITE or clean up M2 code, packages, or documentation, follow `references/package-writing.md` — the official wiki Package Writing Style Guide distilled for agents, with kernel-verified idioms. Conventions there are the skill's only non-pinned source (a living wiki page); behavior claims remain pinned to 1.26.

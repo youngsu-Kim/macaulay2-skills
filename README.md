@@ -72,6 +72,15 @@ The claims above are exactly as strong as the evidence:
 
 One sibling skill per package that earns it, generated the same way from each package's own pinned docs (all 299 ship `master.html` + `toc.html`, so the pipeline is identical): `macaulay2-fourti-two`, `macaulay2-primarydecomposition`, … Install individually via `npx skills add youngsu-Kim/macaulay2-skills --skill <name>`.
 
+## Sources
+
+All material derives from publicly available sources, listed here for auditability:
+
+- **Macaulay2 documentation** — the doc trees shipped inside the pinned 1.26.06 install (© Daniel R. Grayson and Michael E. Stillman, GPL-licensed); `index.tsv`, `toc.md`, and `packages.md` are mechanical transforms of it.
+- **[M2 wiki: Package Writing Style Guide](https://github.com/Macaulay2/M2/wiki/Package-Writing-Style-Guide)** — distilled into `references/package-writing.md` (the skill's only non-pinned source).
+- **Model specifications** — [nrp.ai/llms](https://nrp.ai/llms/), NRP's public model catalog.
+- **Benchmark protocol, prompts, and summaries** — self-collected on NRP-hosted models via OpenCode v2 subagents; recorded in [FINDINGS.md](FINDINGS.md). Raw transcripts are not yet published; releasing them is planned.
+
 ## License
 
 GPL-3.0-or-later — same as [macaulay2-mcp](https://github.com/youngsu-Kim/macaulay2-mcp) and in the spirit of Macaulay2 itself (GPL v2/v3). Generated artifacts are mechanical transforms of the **official Macaulay2 documentation tree** shipped with the distribution (© Daniel R. Grayson and Michael E. Stillman); the hand-written pages quote that documentation. Copyleft keeps the derivation legally clean while keeping the whole family open.

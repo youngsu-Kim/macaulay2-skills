@@ -98,6 +98,18 @@ Findings:
 4. **My OWN concurrency convention was a trap (new trap #18):** prompts prescribed prefixes like `sg_ds_`; in M2 `_` is the SUBSCRIPT operator — `med_R` (single underscore) is a legal indexed assignment, chained `sg_ds_S` dies with `no method for assignment to binary operator _`. Two of three Segre agents burned a call on it (their transcripts also show self-recovery in one retry, which is the intended ladder behavior). Skill now prescribes ONE-underscore prefixes and flags reserved-word segments.
 5. One agent (qwen3-small) proposed that trap #15 is wrong because "rings are per-connection" — REJECTED: that contradicts wave-3's reproduced rebind/cross-ring errors and this harness's documented shared kernel. Recorded here as an agent over-claim caught by the reproduce-before-recording rule (third instance of that rule paying for itself).
 
+## 2026-10-22 — Announcement-day spot checks + trap #19 + style guide
+
+Zulip announcement posted (Package stream, topic "mcp"). Four live checks the same evening, all green: `uvx macaulay2-mcp --version` → 0.1.4; the URL-only skill prompt (README "Or Input", deepseek-v4-flash#false) → correct basis + J == I cross-check; server smoke test reproducing the README's pinned Example-1 values; and a pure-LaTeX prompt — a NEW problem, not in the skill:
+
+Let I = (x^2 + y^2 - 1, xy - 1) in Q[x,y]. Compute a Groebner basis, decide whether I is radical, and determine the number of solutions over C.
+
+Ground truth (author-pinned before the run): basis {xy-1, x^2+y^2-1, y^3+x-y}, dim 0 degree 4, and the subtlety — I is PRIME over Q (x^4-x^2+1 = Φ12 is irreducible, so the quotient is a field) while its variety splits into 4 conjugate C-points. The deepseek#false agent got all three answers correct, used the right radicality idiom unprompted, and identified Φ12. One micro-inaccuracy: claimed "lex order" for a default-GRevLex computation (the bases coincide here) — models may embellish method while the math holds.
+
+Harvest from that test → **trap #19**: `isRadical` does not exist in M2 (0 index rows); the working idiom is `radical I == I`. Shipped with verified blocks (the Φ12 example doubles as the prime-over-Q lesson).
+
+Also added: `references/package-writing.md` — the official M2 wiki Package-Writing-Style-Guide distilled for agents (naming, package code behavior, doc nodes, JSAG prose) with three kernel-verified idiom blocks (`QQ(monoid[getSymbol "a"])`, `instance` vs `class ===` inheritance demo, `getSymbol`). The skill's FIRST non-pinned source, labeled as such: the wiki is a living document, so that page is conventions, not version-pinned behavior. Per the author's new policy, both repos now carry a Sources section and only publicly available material is incorporated.
+
 ## 2026-10-11 — The documentation is authoritative but gappy (five classes)
 
 Discovered by benchmark agents + author probing. Ordered by how badly they mislead a model that trusts them.
